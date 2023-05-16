@@ -1,8 +1,9 @@
 package cosmin.dev.bookify.ui.screens.onboarding
 
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavController
 
 @Composable
-fun ReadingLevelScreen() {
+fun ReadingLevelScreen(navController: NavController) {
 
 }
