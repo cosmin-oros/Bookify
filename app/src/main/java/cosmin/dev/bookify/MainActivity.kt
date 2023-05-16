@@ -12,12 +12,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
+import cosmin.dev.bookify.data.AppPreferences
 import cosmin.dev.bookify.navigation.Navigation
 import cosmin.dev.bookify.ui.theme.BookifyTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+//        AppPreferences.initialize(this)
         setContent {
             BookifyTheme {
                 val navController = rememberNavController()
