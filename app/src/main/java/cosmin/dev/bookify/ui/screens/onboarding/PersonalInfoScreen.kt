@@ -29,6 +29,10 @@ fun PersonalInfoScreen(navController: NavController) {
     var firstNameError by remember { mutableStateOf(false) }
     var lastNameError by remember { mutableStateOf(false) }
 
+//    val first = SharedPreferencesManager.getString("first_name", "default value")
+//    val last = SharedPreferencesManager.getString("last_name", "default value")
+//    val agee = SharedPreferencesManager.getString("age", "default value")
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -51,6 +55,12 @@ fun PersonalInfoScreen(navController: NavController) {
 
             Spacer(modifier = Modifier.height(32.dp))
 
+//            Text(
+//                text = "$first $last $agee",
+//                style = MaterialTheme.typography.h6,
+//                modifier = Modifier.padding(bottom = 16.dp)
+//            )
+
             Text(
                 text = "Please enter your personal info",
                 style = MaterialTheme.typography.h6,
@@ -58,32 +68,6 @@ fun PersonalInfoScreen(navController: NavController) {
             )
 
             Spacer(modifier = Modifier.height(16.dp))
-
-            TextField(
-                value = firstName,
-                onValueChange = {
-                    firstName = it
-                    firstNameError = false // Reset the first name error state when the input changes
-                },
-                label = { Text("First Name") },
-                modifier = Modifier.fillMaxWidth(),
-                isError = firstNameError, // Apply the error state to the TextField
-                colors = TextFieldDefaults.textFieldColors(
-                    focusedIndicatorColor = if (firstNameError) Color.Red else Color.Cyan, // Customize the outline color for error state
-                    unfocusedIndicatorColor = if (firstNameError) Color.Red else Color.Cyan // Customize the outline color for error state
-                )
-            )
-
-            if (firstNameError) {
-                Text(
-                    text = "Please enter a valid first name",
-                    color = Color.Red,
-                    style = MaterialTheme.typography.caption,
-                    modifier = Modifier.padding(top = 4.dp)
-                )
-            }
-
-            Spacer(modifier = Modifier.height(32.dp))
 
             TextField(
                 value = lastName,
@@ -103,6 +87,32 @@ fun PersonalInfoScreen(navController: NavController) {
             if (lastNameError) {
                 Text(
                     text = "Please enter a valid last name",
+                    color = Color.Red,
+                    style = MaterialTheme.typography.caption,
+                    modifier = Modifier.padding(top = 4.dp)
+                )
+            }
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            TextField(
+                value = firstName,
+                onValueChange = {
+                    firstName = it
+                    firstNameError = false // Reset the first name error state when the input changes
+                },
+                label = { Text("First Name") },
+                modifier = Modifier.fillMaxWidth(),
+                isError = firstNameError, // Apply the error state to the TextField
+                colors = TextFieldDefaults.textFieldColors(
+                    focusedIndicatorColor = if (firstNameError) Color.Red else Color.Cyan, // Customize the outline color for error state
+                    unfocusedIndicatorColor = if (firstNameError) Color.Red else Color.Cyan // Customize the outline color for error state
+                )
+            )
+
+            if (firstNameError) {
+                Text(
+                    text = "Please enter a valid first name",
                     color = Color.Red,
                     style = MaterialTheme.typography.caption,
                     modifier = Modifier.padding(top = 4.dp)
@@ -140,6 +150,9 @@ fun PersonalInfoScreen(navController: NavController) {
         Button(
             onClick = {
                 if (isNameValid(firstName) && isNameValid(lastName) && age.isNotBlank() && age.toIntOrNull() != null) {
+                    SharedPreferencesManager.setString("last_name", lastName)
+                    SharedPreferencesManager.setString("first_name", firstName)
+                    SharedPreferencesManager.setString("age", age)
                     navController.navigate(Screen.ReadingLevelScreen.route)
                 } else {
                     ageError = true // Set the age error state if the input is invalid
