@@ -1,25 +1,25 @@
 package cosmin.dev.bookify
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
-import cosmin.dev.bookify.data.AppPreferences
+import androidx.preference.PreferenceManager
+import cosmin.dev.bookify.data.SharedPreferencesManager
 import cosmin.dev.bookify.navigation.Navigation
 import cosmin.dev.bookify.ui.theme.BookifyTheme
 
 class MainActivity : ComponentActivity() {
+    private lateinit var sharedPrefs: SharedPreferences
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        AppPreferences.initialize(this)
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+        SharedPreferencesManager.initializeSharedPrefs(sharedPrefs)
         setContent {
             BookifyTheme {
                 val navController = rememberNavController()
@@ -29,9 +29,9 @@ class MainActivity : ComponentActivity() {
                 ){
                     Navigation(navController = navController)
                 }
-
             }
         }
     }
 }
+
 

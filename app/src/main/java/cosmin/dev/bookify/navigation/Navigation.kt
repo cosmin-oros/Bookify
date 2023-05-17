@@ -21,12 +21,8 @@ fun Navigation(navController: NavHostController) {
             WelcomeScreen(navController = navController)
         }
 
-        composable(Screen.RegisterScreen.route) {
-            RegisterScreen(navController = navController)
-        }
-
-        composable(Screen.LoginScreen.route) {
-            LoginScreen(navController = navController)
+        composable(Screen.PersonalInfoScreen.route) {
+            PersonalInfoScreen(navController = navController)
         }
 
         composable(Screen.ReadingLevelScreen.route) {

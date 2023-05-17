@@ -7,9 +7,8 @@ sealed class Screen(val route: String){
     object CongratulationsScreen: Screen("congrats_screen")
     object GenresScreen: Screen("genres_screen")
     object LengthPreferencesScreen: Screen("length_pref_screen")
-    object LoginScreen: Screen("login_screen")
+    object PersonalInfoScreen: Screen("personal_info_screen")
     object ReadingLevelScreen: Screen("reading_level_screen")
-    object RegisterScreen: Screen("register_screen")
     object WelcomeScreen: Screen("welcome_screen")
     object MainScreen: Screen("main_screen")
 
