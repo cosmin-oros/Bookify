@@ -172,7 +172,7 @@ fun LengthPreferenceScreen(navController: NavController) {
 
         Button(
             onClick = {
-                // Set the preferences for reading level
+                // Set the preferences for length preference
                 SharedPreferencesManager.setString("len_preference", lenPreference)
                 navController.navigate(Screen.CongratulationsScreen.route)
             },

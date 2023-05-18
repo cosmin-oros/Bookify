@@ -15,6 +15,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
 import cosmin.dev.bookify.R
+import cosmin.dev.bookify.data.SharedPreferencesManager
 import cosmin.dev.bookify.navigation.Screen
 import kotlinx.coroutines.delay
 
@@ -35,7 +36,12 @@ fun SplashScreen(navController: NavController) {
             )
         )
         delay(3000L)
-        navController.navigate(Screen.LengthPreferencesScreen.route)
+
+        if (SharedPreferencesManager.getString("logged_in", "no") == "yes") {
+            navController.navigate(Screen.MainScreen.route)
+        } else {
+            navController.navigate(Screen.CongratulationsScreen.route)
+        }
     }
 
     Box(
