@@ -1,5 +1,6 @@
 package cosmin.dev.bookify.ui.screens.main
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -10,6 +11,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Help
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -21,10 +24,38 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import cosmin.dev.bookify.R
 import cosmin.dev.bookify.data.SharedPreferencesManager
+import cosmin.dev.bookify.google_books_api.Book
+import cosmin.dev.bookify.google_books_api.fetchBooksByGenre
 import cosmin.dev.bookify.navigation.Screen
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlin.random.Random
 
+@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun MainScreen(navController: NavController) {
+    var genres = remember { mutableStateListOf<String>() }
+    val books = remember { mutableStateListOf<Book>() }
+    for (i in 0 until 20) {
+        var gen = SharedPreferencesManager.getString("genre$i", "def")
+        if (gen != "def") {
+            genres.add(gen)
+        }
+    }
+
+//    CoroutineScope(Dispatchers.Main).launch {
+//        for (i in 0 until 5) {
+//            var rand = Random.nextInt(20)
+//            val fetchedBooks = fetchBooksByGenre(genres[rand])
+//            if (fetchedBooks.size >= rand) {
+//                books.add(fetchedBooks[fetchedBooks.size - rand])
+//            } else {
+//                books.add(fetchedBooks[0])
+//            }
+//        }
+//    }
+    
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -32,6 +63,9 @@ fun MainScreen(navController: NavController) {
         verticalArrangement = Arrangement.SpaceBetween, // Use SpaceBetween to position elements at top and bottom
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+//        for (i in 0 until 5) {
+//            Text(text = books[i].title)
+//        }
         Column(
             verticalArrangement = Arrangement.Center, // Center the top content vertically
             horizontalAlignment = Alignment.CenterHorizontally,
