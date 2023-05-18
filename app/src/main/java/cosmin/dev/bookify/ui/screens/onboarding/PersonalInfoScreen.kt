@@ -139,7 +139,7 @@ fun PersonalInfoScreen(navController: NavController) {
 
             if (ageError) {
                 Text(
-                    text = "Please enter a valid age",
+                    text = "Please enter a valid age!",
                     color = Color.Red,
                     style = MaterialTheme.typography.caption,
                     modifier = Modifier.padding(top = 4.dp)
@@ -150,6 +150,7 @@ fun PersonalInfoScreen(navController: NavController) {
         Button(
             onClick = {
                 if (isNameValid(firstName) && isNameValid(lastName) && age.isNotBlank() && age.toIntOrNull() != null) {
+                    ageError = false
                     // Set the preferences for last name, first name and age
                     SharedPreferencesManager.setString("last_name", lastName)
                     SharedPreferencesManager.setString("first_name", firstName)
