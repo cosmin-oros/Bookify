@@ -62,7 +62,7 @@ fun PersonalInfoScreen(navController: NavController) {
 //            )
 
             Text(
-                text = "Please enter your personal info",
+                text = "Please enter your personal info!",
                 style = MaterialTheme.typography.h6,
                 modifier = Modifier.padding(bottom = 16.dp)
             )
@@ -150,6 +150,7 @@ fun PersonalInfoScreen(navController: NavController) {
         Button(
             onClick = {
                 if (isNameValid(firstName) && isNameValid(lastName) && age.isNotBlank() && age.toIntOrNull() != null) {
+                    // Set the preferences for last name, first name and age
                     SharedPreferencesManager.setString("last_name", lastName)
                     SharedPreferencesManager.setString("first_name", firstName)
                     SharedPreferencesManager.setString("age", age)
