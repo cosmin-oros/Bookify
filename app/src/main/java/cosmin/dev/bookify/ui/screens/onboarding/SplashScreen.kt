@@ -40,7 +40,7 @@ fun SplashScreen(navController: NavController) {
         if (SharedPreferencesManager.getString("logged_in", "no") == "yes") {
             navController.navigate(Screen.MainScreen.route)
         } else {
-            navController.navigate(Screen.CongratulationsScreen.route)
+            navController.navigate(Screen.WelcomeScreen.route)
         }
     }
 
