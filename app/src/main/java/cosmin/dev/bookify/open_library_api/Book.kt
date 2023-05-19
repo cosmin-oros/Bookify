@@ -1,4 +1,4 @@
-package cosmin.dev.bookify.google_books_api
+package cosmin.dev.bookify.open_library_api
 
 import kotlinx.serialization.Serializable
 
@@ -6,5 +6,6 @@ import kotlinx.serialization.Serializable
 data class Book(
     val title: String,
     val author: String,
-    val description: String
+    val description: String,
+    val imageUrl: String,
 )

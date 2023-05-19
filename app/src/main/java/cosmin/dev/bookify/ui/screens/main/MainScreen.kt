@@ -2,41 +2,33 @@ package cosmin.dev.bookify.ui.screens.main
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Help
 import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cosmin.dev.bookify.R
 import cosmin.dev.bookify.data.SharedPreferencesManager
-import cosmin.dev.bookify.google_books_api.Book
-import cosmin.dev.bookify.google_books_api.fetchBooksByGenre
+import cosmin.dev.bookify.open_library_api.Book
+import cosmin.dev.bookify.open_library_api.BookViewModel
 import cosmin.dev.bookify.navigation.Screen
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlin.random.Random
 
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun MainScreen(navController: NavController) {
     var genres = remember { mutableStateListOf<String>() }
-    val books = remember { mutableStateListOf<Book>() }
+    val bookViewModel: BookViewModel = viewModel()
+    var books by remember { mutableStateOf(emptyList<Book>()) }
+
     for (i in 0 until 20) {
         var gen = SharedPreferencesManager.getString("genre$i", "def")
         if (gen != "def") {
@@ -44,17 +36,17 @@ fun MainScreen(navController: NavController) {
         }
     }
 
-//    CoroutineScope(Dispatchers.Main).launch {
-//        for (i in 0 until 5) {
-//            var rand = Random.nextInt(20)
-//            val fetchedBooks = fetchBooksByGenre(genres[rand])
-//            if (fetchedBooks.size >= rand) {
-//                books.add(fetchedBooks[fetchedBooks.size - rand])
-//            } else {
-//                books.add(fetchedBooks[0])
-//            }
-//        }
-//    }
+    fun fetchBooksByGenre() {
+        // get 5 books for 5 different genres (if the user only has 3 selected then the genre will get repeated)
+        for (i in 0 until 5) {
+            var genreNr = Random.nextInt(20)
+            var genre = genres[genreNr]
+
+            bookViewModel.getBooksByGenre(genre) { fetchedBooks ->
+                books = fetchedBooks
+            }
+        }
+    }
     
     Column(
         modifier = Modifier
@@ -82,6 +74,34 @@ fun MainScreen(navController: NavController) {
 
             Spacer(modifier = Modifier.height(32.dp))
 
+        }
+        
+        Button(onClick = { fetchBooksByGenre() }) {
+            
+        }
+
+        books?.forEach { book ->
+            Column(
+                modifier = Modifier.padding(16.dp)
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.ic_launcher_foreground),
+                    contentDescription = "Book Cover",
+                    modifier = Modifier.size(100.dp)
+                )
+                Text(
+                    text = book.title,
+                    style = MaterialTheme.typography.subtitle1
+                )
+                Text(
+                    text = book.author,
+                    style = MaterialTheme.typography.caption
+                )
+                Text(
+                    text = book.description,
+                    style = MaterialTheme.typography.body2
+                )
+            }
         }
 
         Column(
