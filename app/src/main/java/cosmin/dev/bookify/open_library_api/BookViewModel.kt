@@ -42,7 +42,7 @@ class BookViewModel : ViewModel() {
                                 item.title,
                                 item.author_name.joinToString(", "),
                                 item.description ?: "",
-                                "https://covers.openlibrary.org/b/id/${item.cover_i}-L.jpg"
+                                "https://covers.openlibrary.org/b/id/${item.cover_i}-L.jpg".toInt()
                             )
                         } else {
                             null

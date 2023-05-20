@@ -4,6 +4,9 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
@@ -20,6 +23,8 @@ import cosmin.dev.bookify.data.SharedPreferencesManager
 import cosmin.dev.bookify.open_library_api.Book
 import cosmin.dev.bookify.open_library_api.BookViewModel
 import cosmin.dev.bookify.navigation.Screen
+import cosmin.dev.bookify.open_library_api.BookImage
+import cosmin.dev.bookify.open_library_api.DefaultBooks
 import kotlin.random.Random
 
 @SuppressLint("CoroutineCreationDuringComposition")
@@ -27,10 +32,11 @@ import kotlin.random.Random
 fun MainScreen(navController: NavController) {
     var genres = remember { mutableStateListOf<String>() }
     val bookViewModel: BookViewModel = viewModel()
-    var books by remember { mutableStateOf(emptyList<Book>()) }
+    var books by remember { mutableStateOf<ArrayList<Book>>(DefaultBooks.getBooks()) }
+    var fetchBooks by remember { mutableStateOf(emptyList<Book>()) }
 
     for (i in 0 until 20) {
-        var gen = SharedPreferencesManager.getString("genre$i", "def")
+        var gen = SharedPreferencesManager.getString("genre${i+1}", "def")
         if (gen != "def") {
             genres.add(gen)
         }
@@ -39,12 +45,16 @@ fun MainScreen(navController: NavController) {
     fun fetchBooksByGenre() {
         // get 5 books for 5 different genres (if the user only has 3 selected then the genre will get repeated)
         for (i in 0 until 5) {
-            var genreNr = Random.nextInt(20)
+            var genreNr = Random.nextInt(genres.size)
             var genre = genres[genreNr]
 
             bookViewModel.getBooksByGenre(genre) { fetchedBooks ->
-                books = fetchedBooks
+                fetchBooks = fetchedBooks
             }
+        }
+
+        if (fetchBooks.isNotEmpty()) {
+            books = fetchBooks as ArrayList<Book>
         }
     }
     
@@ -69,39 +79,57 @@ fun MainScreen(navController: NavController) {
             Image(
                 painter = painterResource(id = R.drawable.logo_falcon),
                 contentDescription = "Logo",
-                modifier = Modifier.size(200.dp),
+                modifier = Modifier.size(200.dp).clickable { fetchBooks },
             )
 
             Spacer(modifier = Modifier.height(32.dp))
 
-        }
-        
-        Button(onClick = { fetchBooksByGenre() }) {
-            
-        }
-
-        books?.forEach { book ->
-            Column(
-                modifier = Modifier.padding(16.dp)
+            LazyColumn(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                contentPadding = PaddingValues(vertical = 8.dp)
             ) {
-                Image(
-                    painter = painterResource(R.drawable.ic_launcher_foreground),
-                    contentDescription = "Book Cover",
-                    modifier = Modifier.size(100.dp)
-                )
-                Text(
-                    text = book.title,
-                    style = MaterialTheme.typography.subtitle1
-                )
-                Text(
-                    text = book.author,
-                    style = MaterialTheme.typography.caption
-                )
-                Text(
-                    text = book.description,
-                    style = MaterialTheme.typography.body2
-                )
+                for (i in 0 until 5) {
+                    item {
+                        Card(
+                            modifier = Modifier
+                                .padding(horizontal = 8.dp, vertical = 8.dp)
+                                .fillMaxWidth(),
+                            elevation = 2.dp,
+                            backgroundColor = Color.DarkGray,
+                            shape = RoundedCornerShape(corner = CornerSize(16.dp)),
+                        ) {
+                            Row {
+                                BookImage(book = books[i])
+
+                                Column(
+                                    modifier = Modifier
+                                        .padding(16.dp)
+                                        .fillMaxWidth()
+                                        .align(Alignment.CenterVertically)
+                                ) {
+                                    Text(text = books[i].title, style = MaterialTheme.typography.h5)
+                                    Text(
+                                        text = books[i].author,
+                                        style = MaterialTheme.typography.caption
+                                    )
+
+//                                    Text(
+//                                        text = books[i].description,
+//                                        style = MaterialTheme.typography.h6,
+//                                        color = Color.Green
+//                                    )
+
+                                }
+
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.height(8.dp))
+                    }
+                }
             }
+
         }
 
         Column(

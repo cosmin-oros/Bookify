@@ -25,9 +25,9 @@ import cosmin.dev.bookify.navigation.Screen
 
 @Composable
 fun GenresScreen(navController: NavController) {
-    var genres = remember { mutableStateListOf("Fiction", "Mystery", "Thriller", "Romance", "Fantasy",
-        "Science Fiction", "Historical Fiction", "Young Adult", "Contemporary", "Nonfiction", "Biography",
-        "Memoir", "Self-Help", "Horror", "Crime", "Poetry", "Classics", "Paranormal", "Dystopian", "Humor") }
+    var genres = remember { mutableStateListOf("fiction", "mystery", "thriller", "romance", "fantasy",
+        "science fiction", "historical fiction", "young adult", "contemporary", "nonfiction", "biography",
+        "memoir", "self-help", "horror", "crime", "poetry", "classics", "paranormal", "dystopian", "humor") }
     var selectedGenres = remember { mutableStateListOf<String>() }
     var notEnoughGenresError = remember { mutableStateOf(false) }
 
